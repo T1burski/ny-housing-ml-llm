@@ -5,10 +5,9 @@ import os
 
 def load_csv_to_postgresql():
     try:
-        # Read the CSV file
+
         df = pd.read_csv(f"{os.getcwd()}/dags/data/ny_house_dataset.csv")
         
-        # Create the connection URL
         url = URL.create(
             drivername="postgresql",
             username=os.getenv("DB_USER"),
@@ -18,13 +17,11 @@ def load_csv_to_postgresql():
             database=os.getenv("DB_NAME")
         )
 
-        # Create engine
         engine = create_engine(url)
         
         schema_name = 'ny_datasets'
         table_name = 'original_data'
         
-        # Create schema and table using SQLAlchemy
         create_schema = text(f"CREATE SCHEMA IF NOT EXISTS {schema_name}")
         create_table = text(f"""
             CREATE TABLE IF NOT EXISTS {schema_name}.{table_name} (
