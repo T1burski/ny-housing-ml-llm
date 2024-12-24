@@ -1,3 +1,4 @@
 ny_dev_env
 .env
 .python-version
+__pycache__
