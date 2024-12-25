@@ -5,15 +5,18 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
-from auxiliary_functions import extract_data_postgresql, create_scatter_plot, train_and_optimize_model, evaluate_model
+from etl_train_pipeline_modules.auxiliary_functions import extract_data_postgresql, create_scatter_plot, train_and_optimize_model, evaluate_model
 
 def train_and_version_mlflow():
 
-    mlflow.set_tracking_uri("http://localhost:5000")
+    mlflow.set_tracking_uri("http://mlflow:5000")
     mlflow.set_experiment("regression_models_ny_housing")
 
-    target = 'PRICE'
-    features = ["BATH", "BEDS", "PROPERTYSQFT", "LATITUDE", "LONGITUDE"]
+    target = 'price'
+    features = ["bath", "beds", "propertysqft", "latitude", "longitude"]
+
+    all_columns = features
+    all_columns.append(target)
 
     select_query = f"""
         SELECT
@@ -38,6 +41,9 @@ def train_and_version_mlflow():
     """
 
     df = extract_data_postgresql(select_query)
+
+    for c in all_columns:
+        df[c] = pd.to_numeric(df[c], errors='coerce')
 
     df = df.loc[df[target] <= np.percentile(df[target], 99)]
 
@@ -138,4 +144,3 @@ def train_and_version_mlflow():
         print("Production model updated successfully!")
     else:
         print("Current production model performs better. No updates needed.")
-

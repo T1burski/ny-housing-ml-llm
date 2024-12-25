@@ -27,7 +27,7 @@ def extract_data_postgresql(select_query):
         engine = create_engine(url)
 
         with engine.begin() as connection:
-            result = connection.execute(select_query)
+            result = connection.execute(text(select_query))
             
             rows = result.fetchall()
             
