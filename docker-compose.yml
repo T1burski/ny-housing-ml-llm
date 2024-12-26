@@ -198,19 +198,24 @@ services:
   #   volumes:
   #     - elastic-search-data:/usr/share/elasticsearch/data
   
-  # app:
-  #   build: dsamoduloapp/.
-  #   container_name: dsa_app
-  #   environment:
-  #     - HUGGINGFACE_KEY=<coloque-aqui-seu-token>
-  #   volumes:
-  #     - ./dsamoduloapp/:/app
-  #   networks:
-  #     - network
-  #   depends_on:
-  #     - elasticsearch
-  #   ports:
-  #     - "8501:8501"
+  app:
+    build: web_app/.
+    container_name: web_app
+    environment:
+      - HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACE_KEY}
+      - DB_USER: ${DB_USER}
+      - DB_PASSWORD: ${DB_PASSWORD}
+      - DB_NAME: ${DB_NAME}
+      - DB_HOST: ${DB_HOST}
+      - DB_PORT: ${DB_PORT}
+    volumes:
+      - ./web_app/:/app
+    networks:
+      - network
+    depends_on:
+      - mlflow
+    ports:
+      - "8501:8501"
 
   mlflow:
       image: ghcr.io/mlflow/mlflow:latest

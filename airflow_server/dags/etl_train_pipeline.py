@@ -26,11 +26,11 @@ dag = DAG(
     description="Executes ETL and mlflow training processes"
 )
 
-# dag_pipeline_etl = PythonOperator(
-#     task_id="step_create_original_table",
-#     python_callable=load_csv_to_postgresql,
-#     dag=dag
-# )
+dag_pipeline_etl = PythonOperator(
+    task_id="step_create_original_table",
+    python_callable=load_csv_to_postgresql,
+    dag=dag
+)
 
 dag_pipeline_mlflow = PythonOperator(
     task_id="step_train_version_mlflow",
@@ -38,5 +38,4 @@ dag_pipeline_mlflow = PythonOperator(
     dag=dag
 )
 
-#dag_pipeline_etl >> 
-dag_pipeline_mlflow
+dag_pipeline_etl >> dag_pipeline_mlflow
