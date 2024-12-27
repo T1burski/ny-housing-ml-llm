@@ -6,6 +6,7 @@ import os
 
 def extract_data_postgresql(select_query):
 
+    engine = None
     try:
         url = URL.create(
             drivername="postgresql",
@@ -16,7 +17,6 @@ def extract_data_postgresql(select_query):
             database=os.getenv("DB_NAME")
         )
 
-        # Create engine
         engine = create_engine(url)
 
         with engine.begin() as connection:
@@ -26,17 +26,17 @@ def extract_data_postgresql(select_query):
             
             df = pd.DataFrame(rows, columns=result.keys())
 
-        engine.dispose()
-        print("Database connection closed.")
-
         return df
         
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-        
+    
     finally:
-        engine.dispose()
-        print("Database connection closed.")
+        if engine:
+            engine.dispose()
+            print("Database connection closed.")
+        else:
+            print("An error occurred when starting and disposing the engine")
 
 def load_data_postgresql(data):
 

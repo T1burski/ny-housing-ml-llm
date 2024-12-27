@@ -183,31 +183,17 @@ services:
       - ${AIRFLOW_PROJ_DIR:-.}/airflow_server:/sources
     networks:
       - network
-
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
-  #   container_name: elasticsearch
-  #   environment:
-  #     - discovery.type=single-node
-  #     - xpack.security.enabled=false
-  #   ports:
-  #     - "9200:9200"
-  #     - "9300:9300"
-  #   networks:
-  #     - network
-  #   volumes:
-  #     - elastic-search-data:/usr/share/elasticsearch/data
   
   app:
     build: web_app/.
     container_name: web_app
     environment:
-      - HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACE_KEY}
-      - DB_USER: ${DB_USER}
-      - DB_PASSWORD: ${DB_PASSWORD}
-      - DB_NAME: ${DB_NAME}
-      - DB_HOST: ${DB_HOST}
-      - DB_PORT: ${DB_PORT}
+      HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACE_KEY}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     volumes:
       - ./web_app/:/app
     networks:
@@ -218,20 +204,32 @@ services:
       - "8501:8501"
 
   mlflow:
-      image: ghcr.io/mlflow/mlflow:latest
-      container_name: mlflow
-      ports:
-        - "5000:5000"
-      command: 
-        - mlflow
-        - server
-        - --backend-store-uri
-        - sqlite:///mlflow.db
-        - --host
-        - 0.0.0.0
-      restart: always
-      networks:
-        - network
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    ports:
+      - "5000:5000"
+    command: 
+      - mlflow
+      - server
+      - --backend-store-uri
+      - sqlite:///mlflow.db
+      - --host
+      - 0.0.0.0
+    restart: always
+    networks:
+      - network
+  
+  fast_api:
+    build: fast_api/.
+    container_name: fast_api
+    volumes:
+      - ./fast_api/:/app
+    networks:
+      - network
+    depends_on:
+      - mlflow
+    ports:
+      - "3000:3000"
 
 networks:
   network:
@@ -240,6 +238,3 @@ networks:
 volumes:
   pgvolume:
   postgres-db-volume:
-  # grafana-storage:
-  # grafana-plugins:
-  # elastic-search-data:

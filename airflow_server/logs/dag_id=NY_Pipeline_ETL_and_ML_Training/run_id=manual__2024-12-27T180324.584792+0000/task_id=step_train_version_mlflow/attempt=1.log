@@ -1,0 +1,54 @@
+[2024-12-27T18:18:52.917+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-27T18:18:52.954+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: NY_Pipeline_ETL_and_ML_Training.step_train_version_mlflow manual__2024-12-27T18:03:24.584792+00:00 [queued]>
+[2024-12-27T18:18:52.972+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: NY_Pipeline_ETL_and_ML_Training.step_train_version_mlflow manual__2024-12-27T18:03:24.584792+00:00 [queued]>
+[2024-12-27T18:18:52.974+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2024-12-27T18:18:53.002+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): step_train_version_mlflow> on 2024-12-27 18:03:24.584792+00:00
+[2024-12-27T18:18:53.025+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'NY_Pipeline_ETL_and_ML_Training', 'step_train_version_mlflow', 'manual__2024-12-27T18:03:24.584792+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/etl_train_pipeline.py', '--cfg-path', '/tmp/tmpcsi1st87']
+[2024-12-27T18:18:53.034+0000] {standard_task_runner.py:105} INFO - Job 4: Subtask step_train_version_mlflow
+[2024-12-27T18:18:53.039+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=1010) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2024-12-27T18:18:53.041+0000] {standard_task_runner.py:72} INFO - Started process 1019 to run task
+[2024-12-27T18:18:53.118+0000] {task_command.py:467} INFO - Running <TaskInstance: NY_Pipeline_ETL_and_ML_Training.step_train_version_mlflow manual__2024-12-27T18:03:24.584792+00:00 [running]> on host 439c36457ef8
+[2024-12-27T18:18:53.273+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Artur Tiburski' AIRFLOW_CTX_DAG_ID='NY_Pipeline_ETL_and_ML_Training' AIRFLOW_CTX_TASK_ID='step_train_version_mlflow' AIRFLOW_CTX_EXECUTION_DATE='2024-12-27T18:03:24.584792+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-12-27T18:03:24.584792+00:00'
+[2024-12-27T18:18:53.276+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-27T18:18:55.658+0000] {logging_mixin.py:190} WARNING - 2024/12/27 18:18:55 INFO mlflow.tracking.fluent: Experiment with name 'regression_models_ny_housing' does not exist. Creating a new experiment.
+[2024-12-27T18:19:00.070+0000] {logging_mixin.py:190} INFO - Database connection closed.
+[2024-12-27T18:19:00.076+0000] {logging_mixin.py:190} INFO - Database connection closed.
+[2024-12-27T18:19:00.472+0000] {logging_mixin.py:190} WARNING - 2024/12/27 18:19:00 WARNING mlflow.utils.git_utils: Failed to import Git (the Git executable is probably not on your PATH), so Git SHA is not available. Error: Failed to initialize: Bad git executable.
+The git executable must be specified in one of the following ways:
+    - be included in your $PATH
+    - be set via $GIT_PYTHON_GIT_EXECUTABLE
+    - explicitly set via git.refresh(<full-path-to-git-executable>)
+
+All git commands will error until this is rectified.
+
+This initial message can be silenced or aggravated in the future by setting the
+$GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+    - quiet|q|silence|s|silent|none|n|0: for no message or exception
+    - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+    - error|e|exception|raise|r|2: for a raised exception
+
+Example:
+    export GIT_PYTHON_REFRESH=quiet
+[2024-12-27T18:19:00.714+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/joblib/parallel.py:1359 UserWarning: Loky-backed parallel loops cannot be called in a multiprocessing, setting n_jobs=1
+[2024-12-27T19:11:30.384+0000] {job.py:229} INFO - Heartbeat recovered after 2114.57 seconds
+[2024-12-27T19:15:17.333+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/xgboost/core.py:158 UserWarning: [19:15:17] WARNING: /workspace/src/c_api/c_api.cc:1374: Saving model in the UBJSON format as default.  You can use file extension: `json`, `ubj` or `deprecated` to choose between formats.
+[2024-12-27T19:15:41.168+0000] {logging_mixin.py:190} WARNING - 2024/12/27 19:15:41 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.
+[2024-12-27T19:15:41.951+0000] {logging_mixin.py:190} INFO - 🏃 View run amazing-ant-381 at: http://mlflow:5000/#/experiments/1/runs/7797a15d0d41433c8d02ac32659dea4a
+[2024-12-27T19:15:41.952+0000] {logging_mixin.py:190} INFO - 🧪 View experiment at: http://mlflow:5000/#/experiments/1
+[2024-12-27T19:15:42.385+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/joblib/parallel.py:1359 UserWarning: Loky-backed parallel loops cannot be called in a multiprocessing, setting n_jobs=1
+[2024-12-27T19:17:37.457+0000] {logging_mixin.py:190} WARNING - 2024/12/27 19:17:37 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.
+[2024-12-27T19:17:39.266+0000] {logging_mixin.py:190} INFO - 🏃 View run abrasive-penguin-117 at: http://mlflow:5000/#/experiments/1/runs/5dabfd145f304c1cbc9c34dce3499cd8
+[2024-12-27T19:17:39.268+0000] {logging_mixin.py:190} INFO - 🧪 View experiment at: http://mlflow:5000/#/experiments/1
+[2024-12-27T19:17:39.444+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/mlflow/store/artifact/utils/models.py:31 FutureWarning: ``mlflow.tracking.client.MlflowClient.get_latest_versions`` is deprecated since 2.9.0. Model registry stages will be removed in a future major release. To learn more about the deprecation of model registry stages, see our migration guide here: https://mlflow.org/docs/latest/model-registry.html#migrating-from-stages
+[2024-12-27T19:17:40.196+0000] {logging_mixin.py:190} INFO - New best model (random_forest) outperforms production model. Updating production deployment...
+[2024-12-27T19:17:40.593+0000] {logging_mixin.py:190} WARNING - Registered model 'regression_model' already exists. Creating a new version of this model...
+[2024-12-27T19:17:40.832+0000] {logging_mixin.py:190} WARNING - 2024/12/27 19:17:40 INFO mlflow.store.model_registry.abstract_store: Waiting up to 300 seconds for model version to finish creation. Model name: regression_model, version 1
+[2024-12-27T19:17:40.833+0000] {logging_mixin.py:190} WARNING - Created version '1' of model 'regression_model'.
+[2024-12-27T19:17:40.838+0000] {logging_mixin.py:190} WARNING - /opt/***/***_server/dags/etl_train_pipeline_modules/pipeline_train.py:130 FutureWarning: ``mlflow.tracking.client.MlflowClient.transition_model_version_stage`` is deprecated since 2.9.0. Model registry stages will be removed in a future major release. To learn more about the deprecation of model registry stages, see our migration guide here: https://mlflow.org/docs/latest/model-registry.html#migrating-from-stages
+[2024-12-27T19:17:41.001+0000] {logging_mixin.py:190} INFO - Production model updated successfully!
+[2024-12-27T19:17:41.443+0000] {python.py:240} INFO - Done. Returned value was: None
+[2024-12-27T19:17:42.047+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-27T19:17:42.059+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=NY_Pipeline_ETL_and_ML_Training, task_id=step_train_version_mlflow, run_id=manual__2024-12-27T18:03:24.584792+00:00, execution_date=20241227T180324, start_date=20241227T181852, end_date=20241227T191742
+[2024-12-27T19:17:42.496+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-12-27T19:17:42.966+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-12-27T19:17:42.976+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

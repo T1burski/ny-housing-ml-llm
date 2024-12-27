@@ -15,7 +15,7 @@ def train_and_version_mlflow():
     target = 'price'
     features = ["bath", "beds", "propertysqft", "latitude", "longitude"]
 
-    all_columns = features
+    all_columns = features.copy()
     all_columns.append(target)
 
     select_query = f"""
@@ -45,7 +45,8 @@ def train_and_version_mlflow():
     for c in all_columns:
         df[c] = pd.to_numeric(df[c], errors='coerce')
 
-    df = df.loc[df[target] <= np.percentile(df[target], 99)]
+    outliers_filers = (df['price'] <= np.percentile(df['price'], 99)) & (df["beds"] <= 32) & (df["bath"] <= 11)
+    df = df.loc[outliers_filers]
 
     X = df[features]
     y = df[target]
