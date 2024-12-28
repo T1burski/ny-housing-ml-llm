@@ -29,7 +29,7 @@ def extract_data_postgresql(select_query):
         return df
         
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+         raise Exception(f"An error occurred: {str(e)}")
     
     finally:
         if engine:
@@ -69,7 +69,7 @@ def load_data_postgresql(data):
                 MED_PRICE DECIMAL(20,2),
                 MED_PROPERTYSQFT DECIMAL(15,2),
                 N_HOUSES INTEGER,
-                REVIEW INTEGER,
+                REVIEW VARCHAR(5),
                 CREATED_AT DATE
             )
         """)
@@ -79,7 +79,7 @@ def load_data_postgresql(data):
             connection.execute(create_schema)
             connection.execute(create_table)
             
-            data_columns = [i.upper() for i, _ in data[0].items()]
+            data_columns = [i for i, _ in data[0].items()]
             # Prepare the insert query
             columns = ', '.join(data_columns)
             placeholders = ', '.join([':' + col for col in data_columns])
@@ -91,7 +91,7 @@ def load_data_postgresql(data):
         print(f"Successfully loaded new user request records into {schema_name}.{table_name}")
     
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+         raise Exception(f"An error occurred: {str(e)}")
         
     finally:
         engine.dispose()

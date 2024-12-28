@@ -3,9 +3,22 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_community.llms import HuggingFaceHub
 from app_functions.database_functions import extract_data_postgresql
 
+def clean_llm_output(text):
+
+    if "Report:" in text:
+        text = text.split("Report:")[1].strip()
+        text = text.rstrip('\n').strip()
+    elif "Human:" in text:
+        text = text.split("Human:")[1].strip()
+        text = text.split('\n')[2].strip()
+
+    text = text.replace('\n', ' ').strip()
+
+    return text
+
 
 def llm_and_rag_application(pred_price, propsqft, sublocality):
-
+    
     try:
 
         select_query = f"""
@@ -30,7 +43,7 @@ def llm_and_rag_application(pred_price, propsqft, sublocality):
         n_houses = int(df["n_houses"].values[0])
     
     except Exception as e:
-        print(f"An error occurred during data extraction for RAG: {str(e)}")
+         raise Exception(f"An error occurred during data extraction for RAG: {str(e)}")
 
     try:
     
@@ -38,25 +51,23 @@ def llm_and_rag_application(pred_price, propsqft, sublocality):
         
         llm = HuggingFaceHub(
             repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-            model_kwargs={"temperature": 0.7, "max_length": 512}
+            model_kwargs={"temperature": 0.7, "max_length": 4096}
         )
 
         prompt = ChatPromptTemplate.from_messages(
             [
-                ("system", "You are an expert in the New York housing market. You are receiving data that represent the predicted house price based on user inputs along with data that represent price, poperty square foot and number of houses in the sublocality chosen by the user. Analyse these data and build a small, insightful and direct report comparing the predicted price, property square foot and the ratio between them with the data observed in the sublocality. Add more comparisons and analysis as you see fit. Write in english and with simple language."),
-                ("user", "question: {question}")
+                ("system", "You are an expert in the New York housing market. You are receiving data that represent the predicted house price based on user inputs along with data that represent price, property square feet and number of houses in the sublocality. Analyse these data and build a small and insightful and direct report comparing the predicted price, property square foot and the ratio between them with the data observed in the sublocality. Write in english and with simple language. Answer using a continuous text with no new paragraphs. Be extremely direct in your answers. END_OF_PROMPT"),
+                ("user", "question: {question} END_OF_QUERY")
             ]
         )
 
-        chain = prompt | llm | output_parser
+        chain = prompt | llm | output_parser | clean_llm_output
 
-        data_input = f"Predicted house price {pred_price} Property area in square foots selected by the user {propsqft} Sublocality (region) of the house selected by the user {sublocality} Median price of the houses in the sublocality (region) selected by the user {med_price} Median property square foot of the houses in the sublocality (region) selected by the user {med_propertysqft} Total number of houses in the sublocality selected by the user {n_houses}."
+        data_input = f"Predicted house price USD {pred_price} Property area (in square feet) selected by the user {propsqft} Sublocality (region) of the house selected by the user {sublocality} Median price of the houses in the sublocality (region) selected by the user USD {med_price} Median property area (in square feet) of the houses in the sublocality (region) selected by the user {med_propertysqft} Total number of houses in the sublocality selected by the user {n_houses}."
         
         response = chain.invoke({'question': data_input})
 
         return response, med_price, med_propertysqft, n_houses
     
     except Exception as e:
-        print(f"An error occurred during LLM abd RAG application: {str(e)}")
-        return response, med_price, med_propertysqft, n_houses
-
+         raise Exception(f"An error occurred during LLM and RAG application: {str(e)}")
