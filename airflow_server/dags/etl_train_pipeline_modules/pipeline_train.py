@@ -125,17 +125,18 @@ def train_and_version_mlflow():
         except:
             pass
         
-        model_version = mlflow.register_model(model_uri, "regression_model")
+        
+        model_version_new = mlflow.register_model(model_uri, "regression_model")
         
         client.transition_model_version_stage(
             name="regression_model",
-            version=model_version.version,
+            version=model_version_new.version,
             stage="Production"
         )
         
         for model_version in client.search_model_versions("name='regression_model'"):
             if model_version.current_stage == "Production" and \
-               model_version.version != model_version.version:
+               model_version.version != model_version_new.version:
                 client.transition_model_version_stage(
                     name="regression_model",
                     version=model_version.version,

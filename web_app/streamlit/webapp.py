@@ -100,7 +100,8 @@ def main():
                 try:
                     st.session_state.ai_response, med_price, med_propertysqft, n_houses = llm_and_rag_application(st.session_state.predicted_price, float(prop_sqft), sublocality)
 
-                    st.write(st.session_state.ai_response)
+                    st.markdown(st.session_state.ai_response)
+
                 except Exception as e:
                     st.error(f"An error occurred when generating AI response: {str(e)}")
                 
