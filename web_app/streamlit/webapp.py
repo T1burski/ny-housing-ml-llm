@@ -1,3 +1,5 @@
+# Builds the Web App front-end using streamlit
+
 import streamlit as st
 from app_functions.database_functions import load_data_postgresql, extract_data_postgresql
 from app_functions.llm_functions import llm_and_rag_application

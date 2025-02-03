@@ -1,3 +1,6 @@
+# Builds the API using FastAPI using the model in
+# production available on mlflow
+
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -8,6 +11,8 @@ import mlflow
 import warnings
 warnings.filterwarnings('ignore')
 
+# defines the mlflow model's url in mlflow
+# and defines the production model
 mlflow.set_tracking_uri("http://mlflow:5000")
 
 try: 
@@ -16,6 +21,7 @@ try:
 except Exception as e:
         print(f"An error occurred during loading prod model from mlflow: {str(e)}")
 
+# Defining the API using FastAPI
 tags_metadata = [{"name": "fraud-detect", "description": "Fraudulent Transaction Detection API"}]
 app = FastAPI(title = "Fraud Detection API",
               description = "Fraudulent Transaction Detection API",
@@ -23,6 +29,8 @@ app = FastAPI(title = "Fraud Detection API",
               contact = {"name": "Artur"},
               openapi_tags = tags_metadata)
 
+# Data validation to be applied on
+# the data that comes from the json payload
 class Features(BaseModel):
     bath: float
     beds: float

@@ -12,6 +12,12 @@ import xgboost as xgb
 
 def extract_data_postgresql(select_query):
 
+    '''
+    Function that serves to extract data
+    from a postgres database based on a 
+    input query    
+    '''
+
     try:
         url = URL.create(
             drivername="postgresql",
@@ -45,7 +51,13 @@ def extract_data_postgresql(select_query):
         print("Database connection closed.")
 
 def create_scatter_plot(y_true, y_pred, model_name):
-
+    
+    '''
+    Function that serves to build a scatter
+    plot of two variables, also having as
+    input the name of the model that generated
+    one of them    
+    '''
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.scatter(y_true, y_pred, alpha=0.5)
@@ -57,6 +69,10 @@ def create_scatter_plot(y_true, y_pred, model_name):
 
 def train_and_optimize_model(model_type, X_train, y_train, param_grid):
 
+    '''
+    Function that serves to perform hyperparameter tunning
+    based on hyperparameters input and the chosen algorithm    
+    '''
 
     if model_type == "xgboost":
         model = xgb.XGBRegressor(random_state=42)
@@ -77,6 +93,12 @@ def train_and_optimize_model(model_type, X_train, y_train, param_grid):
 
 
 def evaluate_model(model, X_test, y_test):
+
+    '''
+    Function that serves to apply predictions
+    to test inputs and generate the metrics
+    of MSE and MAE based on true values    
+    '''
 
     y_pred = model.predict(X_test)
 

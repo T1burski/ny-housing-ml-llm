@@ -4,6 +4,13 @@ from sqlalchemy.engine import URL
 import os
 
 def load_csv_to_postgresql():
+
+    '''
+    Function that defines the extraction of 
+    .csv data and loading to the Postgres DW
+    on Render (cloud)
+    '''
+
     try:
 
         df = pd.read_csv(f"{os.getcwd()}/dags/data/ny_house_dataset.csv")
@@ -46,22 +53,18 @@ def load_csv_to_postgresql():
         """)
         
         with engine.begin() as connection:
-            # Create schema and table
+
             connection.execute(create_schema)
             connection.execute(create_table)
             
-            # Clear existing data
             connection.execute(text(f"TRUNCATE TABLE {schema_name}.{table_name}"))
             
-            # Prepare the insert query
             columns = ', '.join(df.columns)
             placeholders = ', '.join([':' + col for col in df.columns])
             insert_query = text(f"INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({placeholders})")
             
-            # Convert DataFrame to list of dictionaries
             records = df.to_dict('records')
             
-            # Insert data in chunks
             chunk_size = 1000
             for i in range(0, len(records), chunk_size):
                 chunk = records[i:i + chunk_size]

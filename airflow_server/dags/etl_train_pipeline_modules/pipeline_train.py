@@ -9,6 +9,11 @@ from etl_train_pipeline_modules.auxiliary_functions import extract_data_postgres
 
 def train_and_version_mlflow():
 
+    '''
+    Function that trains the model
+    and adds version control using mlflow
+    '''
+
     mlflow.set_tracking_uri("http://mlflow:5000")
     mlflow.set_experiment("regression_models_ny_housing")
 
@@ -40,21 +45,26 @@ def train_and_version_mlflow():
         FROM ny_datasets.original_data
     """
 
+    # Extracting data from the postgres database
     df = extract_data_postgresql(select_query)
 
     for c in all_columns:
         df[c] = pd.to_numeric(df[c], errors='coerce')
 
+    # Removing outliers according to EDA
     outliers_filers = (df['price'] <= np.percentile(df['price'], 99)) & (df["beds"] <= 32) & (df["bath"] <= 11)
     df = df.loc[outliers_filers]
 
     X = df[features]
     y = df[target]
 
+    # train test split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.1, random_state=42
     )
 
+    # Defining hyperparameters search
+    # spaces for tunning 
     param_grids = {
         "xgboost": {
             "n_estimators": [100, 200, 300],
@@ -69,6 +79,7 @@ def train_and_version_mlflow():
     best_mse = float('inf')
     best_model_info = None
     
+    # Starting version control with mlflow
     for model_type in ["xgboost", "random_forest"]:
         with mlflow.start_run() as run:
 
@@ -124,7 +135,6 @@ def train_and_version_mlflow():
             client.create_registered_model("regression_model")
         except:
             pass
-        
         
         model_version_new = mlflow.register_model(model_uri, "regression_model")
         

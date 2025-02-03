@@ -1,3 +1,6 @@
+# Dockerfile that builds the image that will be used to run
+# the web app with streamlit
+
 FROM python:3.11
 
 WORKDIR /app
