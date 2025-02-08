@@ -66,4 +66,19 @@ When the user accesses the page, they see the following:
 ![image](https://github.com/user-attachments/assets/0277f274-2336-42e1-9f01-53bc1faba100)
 
 
-### 6) Conclusions and Running the Project:
+### 6) Conclusions, Running the Project & Improvements for the Future:
+The main focus of this project was to showcase the ability to use various tools commonly used in the data/development world, such as mlflow, docker, fastapi, airflow and etc. All while solving a business case that has a clear and applicable objective, very possible to occurr in the industry. For now, we cannot define a metric (financial or not) to measure the impact of the application of the system built. Maybe only the proportion of positive user feedback?
+
+Improvements for the future: Solving eventual Output Truncations for the AI Report and eventual text format changes (format errors in the middle of the text outputs) that occurr with the output.
+
+In order to run this project, one has to create a postgresql database and add the credentials to a .env file within the root of the project's directory. Also, a API key is necessary in order to use the HuggingFace API, also putting it in a .env file.
+
+After this, the following docker commands need to be ran:
+
+docker-compose build (This command builds the images associated with the docker-compose file)
+
+docker-compose up --scale fast_api=0 (this command starts the containers associated to all images but the fast_api one. This is necessary because the FastAPI needs to consume the mlflow model after it exists. So first, when using the system for the first time, the model needs to be trained and to into production in mlflow before using it with FastAPI)
+
+docker-compose up fast_api (run this after the first model was trained with mlflow. This happens after a first ETL/Train pipeline is ran with Airflow).
+
+Then, the Web App is ready to be used!
